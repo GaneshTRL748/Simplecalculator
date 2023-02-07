@@ -6,7 +6,7 @@ abstract class Numbers{
 	Logger l= Logger.getLogger("com.api.jar");
 	 double num1;
 	 double num2;
-	public Numbers(double d, double e) {
+	protected Numbers(double d, double e) {
 		this.num1=d;
 		this.num2=e;
 	}
@@ -20,7 +20,7 @@ class Add extends Numbers{
 	@Override
 	public void calculate()
 	{
-		l.log(Level.INFO,()->"Result:"+(this.num1+this.num2));
+		l.log(Level.INFO,()->"AdditionResult:"+(this.num1+this.num2));
 	}
 }
 class Sub extends Numbers{
@@ -30,7 +30,7 @@ class Sub extends Numbers{
 	}
 	@Override
 	public void calculate() {
-		l.log(Level.INFO,()->"Result:"+(this.num1-this.num2));
+		l.log(Level.INFO,()->"SubractionResult:"+(this.num1-this.num2));
 	}
 }
 class Mul extends Numbers{
@@ -41,7 +41,7 @@ class Mul extends Numbers{
 
 	@Override
 	public void calculate() {
-		l.log(Level.INFO,()->"Result:"+(this.num1*this.num2));	
+		l.log(Level.INFO,()->"MultiplicationResult:"+(this.num1*this.num2));	
 	}
 	
 }
@@ -54,7 +54,7 @@ class Div extends Numbers{
 	@Override
 	public void calculate() {
 	
-		l.log(Level.INFO,()->"Result:"+(this.num1/this.num2));	
+		l.log(Level.INFO,()->"DivisionResult:"+(this.num1/this.num2));	
 
 	}
 	
@@ -78,6 +78,7 @@ public class Simplecalculator {
 	    	  case '0':
 	    	  {
 	    		  System.exit(0);
+	    		  break;
 	    	  }
     	     case '+':
     	     { 
@@ -107,6 +108,7 @@ public class Simplecalculator {
     	     default:
     	     {
     	    	 l.info("Invalid Choice!!!!");
+    	    	 break;
     	     }
     	  }
     	}
