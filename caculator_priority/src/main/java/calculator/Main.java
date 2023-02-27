@@ -1,20 +1,22 @@
 package calculator;
-
 import java.util.*;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 class Calculator{
 	static PrintStream out=new PrintStream(new FileOutputStream(FileDescriptor.out));
-    String exp;
+	String str;
+    String exp[];
     char[] stack;
-    StringBuilder ans=new StringBuilder();
+    int index=-1;
+    int ansindex=0;
+    String ans[];
     HashMap<Character,Integer> map=new HashMap<Character,Integer>();
     int[] ansstack;
     int peek=-1;
-    void insert(char temp)
+    void insert(String temp)
     {
-        ansstack[++peek]=temp-'0';
+        ansstack[++peek]=Integer.parseInt(temp);
     }
     int getnum()
     {
@@ -43,7 +45,7 @@ class Evaluate extends Calculator
         {
             x=a1.getnum();
             y=a1.getnum();
-            ans=x-y;
+            ans=y-x;
             a1.ansstack[++a1.peek]=ans;
         }
         else if(temp=='*')
@@ -104,7 +106,6 @@ public class Main extends Calculator
         }
           top--;
         }
-        
     }
     void push(char temp)
     {
@@ -140,15 +141,53 @@ public class Main extends Calculator
     void pop()
     {
         if(top>=0){
-          ans.append(this.stack[this.top]);
+        	ans[ansindex++]=Character.toString(this.stack[this.top]);
            top--;
+        }
+    }
+    String getexp()
+    {
+    	Scanner p=new Scanner(System.in);
+    	String exp=p.next();
+    	for(int i=0;i<exp.length();i++)
+    	{
+    		if(exp.charAt(i)=='+'||exp.charAt(i)=='-'||exp.charAt(i)=='*'||exp.charAt(i)=='/'||exp.charAt(i)=='('||exp.charAt(i)==')'||
+    				exp.charAt(i)=='^'||Character.isDigit(exp.charAt(i)))
+    		{
+    			continue;
+    		}
+    		else {
+    			out.println("Only number should be contain");
+    			return getexp();
+    		}
+    	}
+    	return exp;
+    }
+    void split()
+    {
+    	int flag=0;
+        for(int i=0;i<str.length();i++){
+                    if(Character.isDigit(str.charAt(i)))
+                    {
+                        if(flag==0){
+                           exp[++index]=Character.toString(str.charAt(i));
+                           flag=1;
+                        }
+                        else{
+                            exp[index]=exp[index]+str.charAt(i);
+                        }
+                    }
+                    else{
+                        exp[++index]=Character.toString(str.charAt(i));
+                        flag=0;
+                    }
         }
     }
 	public static void main(String[] args) {
 	    Main a1=new Main();
 	    Scanner p=new Scanner(System.in);
 	    out.print("Enter the expression for evaluation:");
-	    a1.exp=p.next();
+	    a1.str=a1.getexp();
 	    a1.map.put('(',4);
 	    a1.map.put(')',4);
 	    a1.map.put('^',3);
@@ -156,34 +195,36 @@ public class Main extends Calculator
 	    a1.map.put('*',2);
 	    a1.map.put('+',1);
 	    a1.map.put('-',1);
-	    a1.stack=new char[a1.exp.length()];
-	    for(int i=0;i<a1.exp.length();i++)
+	    a1.exp=new String[a1.str.length()];
+	    a1.split();
+	    a1.stack=new char[a1.index];
+	    a1.ans=new String[a1.index+1];
+	    for(int i=0;i<=a1.index;i++)
 	    {
-	        if(a1.exp.charAt(i)=='*'||a1.exp.charAt(i)=='/'||a1.exp.charAt(i)=='+'||
-	        a1.exp.charAt(i)=='-'||a1.exp.charAt(i)=='('||a1.exp.charAt(i)==')'||a1.exp.charAt(i)=='^'){
-	           
-	              a1.operation(a1.exp.charAt(i));
-	        }
-	        else{
-	            a1.ans.append(a1.exp.charAt(i));
-	        }
+	    	if(a1.exp[i].equals("+")||a1.exp[i].equals("-")||a1.exp[i].equals("*")||
+	    			a1.exp[i].equals("/")||a1.exp[i].equals("^")||a1.exp[i].equals("(")||a1.exp[i].equals(")"))
+	    	{
+	    		 a1.operation(a1.exp[i].charAt(0));
+	    	}
+	    	else {
+	    		a1.ans[a1.ansindex++]=a1.exp[i];
+	    	}
 	    }
 	    for(int i=a1.top;i>=0;i--)
 	    {
 	        a1.pop();
 	    }
-	    Evaluate a2=new Evaluate();
-	    a2.ansstack=new int[a1.ans.length()];
-	    for(int i=0;i<a1.ans.length();i++)
+	   Evaluate a2=new Evaluate();
+	    a2.ansstack=new int[a1.ansindex];
+	    for(int i=0;i<a1.ansindex;i++)
 	    {
-	        if(a1.ans.charAt(i)=='+'||a1.ans.charAt(i)=='-'||
-	        a1.ans.charAt(i)=='*'||a1.ans.charAt(i)=='/'||a1.ans.charAt(i)=='^')
+	        if(a1.ans[i].equals("+")||a1.ans[i].equals("-")||a1.ans[i].equals("*")||
+	    			a1.ans[i].equals("/")||a1.ans[i].equals("^"))
 	        {
-	            a2.evaluate(a1.ans.charAt(i),a2);
-	           
+	        	a2.evaluate(a1.ans[i].charAt(0), a2);
 	        }
-	        else{
-	            a2.insert(a1.ans.charAt(i));
+	        else {
+	        	a2.insert(a1.ans[i]);
 	        }
 	    }
 	    a2.display();
