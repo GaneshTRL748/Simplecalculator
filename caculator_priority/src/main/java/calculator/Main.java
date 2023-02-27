@@ -151,7 +151,7 @@ public class Main extends Calculator
     	String exp=p.next();
     	for(int i=0;i<exp.length();i++)
     	{
-    		if(exp.charAt(i)!='+'&&false==Character.isDigit(exp.charAt(i))&&exp.charAt(i)!='-'&&exp.charAt(i)!='*'&&exp.charAt(i)!='/'&&
+    		if(exp.charAt(i)!='+'&&!Character.isDigit(exp.charAt(i))&&exp.charAt(i)!='-'&&exp.charAt(i)!='*'&&exp.charAt(i)!='/'&&
     				exp.charAt(i)!='('&&exp.charAt(i)!=')'&&exp.charAt(i)!='^')
     		{
     			out.print("It should be number type");
