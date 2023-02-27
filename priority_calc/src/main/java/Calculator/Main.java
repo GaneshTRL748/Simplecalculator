@@ -1,28 +1,27 @@
-package Calculator;
+package calculator;
 import java.util.*;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.lang.Math;
 class Calculator{
 	static PrintStream out=new PrintStream(new FileOutputStream(FileDescriptor.out));
     String exp;
-    char[] stack=new char[10];
+    char[] stack;
     StringBuilder ans=new StringBuilder();
     HashMap<Character,Integer> map=new HashMap<Character,Integer>();
-    int[] ans_stack=new int[10];
+    int[] ansstack;
     int peek=-1;
     void insert(char temp)
     {
-        ans_stack[++peek]=temp-'0';
+        ansstack[++peek]=temp-'0';
     }
     int getnum()
     {
-        return ans_stack[peek--];
+        return ansstack[peek--];
     }
     void display()
     {
-        out.print(ans_stack[peek]);
+        out.print(ansstack[peek]);
     }
 }
 class Evaluate extends Calculator
@@ -37,35 +36,35 @@ class Evaluate extends Calculator
             x=a1.getnum();
             y=a1.getnum();
             ans=x+y;
-            a1.ans_stack[++a1.peek]=ans;
+            a1.ansstack[++a1.peek]=ans;
         }
         else if(temp=='-')
         {
             x=a1.getnum();
             y=a1.getnum();
             ans=x-y;
-            a1.ans_stack[++a1.peek]=ans;
+            a1.ansstack[++a1.peek]=ans;
         }
         else if(temp=='*')
         {
             x=a1.getnum();
             y=a1.getnum();
             ans=x*y;
-            a1.ans_stack[++a1.peek]=ans;
+            a1.ansstack[++a1.peek]=ans;
         }
         else if(temp=='/')
         {
             x=a1.getnum();
             y=a1.getnum();
             ans=y/x;
-            a1.ans_stack[++a1.peek]=ans;
+            a1.ansstack[++a1.peek]=ans;
         }
         else{
             
             x=a1.getnum();
             y=a1.getnum();
             ans=(int)Math.pow(y,x);
-            a1.ans_stack[++a1.peek]=ans;
+            a1.ansstack[++a1.peek]=ans;
         }
     }
 }
@@ -85,17 +84,17 @@ public class Main extends Calculator
         }
         else if(temp==')')
         {
-            brack_operation();
+            brackoperation();
         }
         else if(this.stack[this.top]==temp)
         {
             associtivity(temp);
         }
         else{
-            pres_check(temp);
+            prescheck(temp);
         }
     }
-    void brack_operation()
+    void brackoperation()
     {
         if(top>=0){
         while(this.stack[this.top]!='(')
@@ -122,7 +121,7 @@ public class Main extends Calculator
             operation(temp);
         }
     }
-    void pres_check(char temp)
+    void prescheck(char temp)
     {
         if(this.stack[this.top]=='(')
         {
@@ -147,7 +146,7 @@ public class Main extends Calculator
 	public static void main(String[] args) {
 	    Main a1=new Main();
 	    Scanner p=new Scanner(System.in);
-	    out.print("Enter the expression:");
+	    out.print("Enter the expression for evaluation:");
 	    a1.exp=p.next();
 	    a1.map.put('(',4);
 	    a1.map.put(')',4);
@@ -156,6 +155,7 @@ public class Main extends Calculator
 	    a1.map.put('*',2);
 	    a1.map.put('+',1);
 	    a1.map.put('-',1);
+	    a1.stack=new char[a1.exp.length()];
 	    for(int i=0;i<a1.exp.length();i++)
 	    {
 	        if(a1.exp.charAt(i)=='*'||a1.exp.charAt(i)=='/'||a1.exp.charAt(i)=='+'||
@@ -172,6 +172,7 @@ public class Main extends Calculator
 	        a1.pop();
 	    }
 	    Evaluate a2=new Evaluate();
+	    a2.ansstack=new int[a1.ans.length()];
 	    for(int i=0;i<a1.ans.length();i++)
 	    {
 	        if(a1.ans.charAt(i)=='+'||a1.ans.charAt(i)=='-'||
