@@ -149,15 +149,14 @@ public class Main extends Calculator
     {
     	Scanner p=new Scanner(System.in);
     	String exp=p.next();
-    	loop:for(int i=0;i<exp.length();i++)
+    	for(int i=0;i<exp.length();i++)
     	{
-           if(exp.charAt(i)=='+')
-           {
-        	   continue loop;
-           }
-           else {
-        	   return getexp();
-           }
+    		if(exp.charAt(i)!='+'&&false==Character.isDigit(exp.charAt(i))&&exp.charAt(i)!='-'&&exp.charAt(i)!='*'&&exp.charAt(i)!='/'&&
+    				exp.charAt(i)!='('&&exp.charAt(i)!=')'&&exp.charAt(i)!='^')
+    		{
+    			out.print("It should be number type");
+    			return getexp();
+    		}
     	}
     	return exp;
     }
