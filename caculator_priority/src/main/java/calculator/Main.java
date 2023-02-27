@@ -6,11 +6,11 @@ import java.io.PrintStream;
 class Calculator{
 	static PrintStream out=new PrintStream(new FileOutputStream(FileDescriptor.out));
 	String str;
-    String exp[];
+    String[] exp;
     char[] stack;
     int index=-1;
     int ansindex=0;
-    String ans[];
+    String[] ans;
     HashMap<Character,Integer> map=new HashMap<Character,Integer>();
     int[] ansstack;
     int peek=-1;
@@ -149,17 +149,15 @@ public class Main extends Calculator
     {
     	Scanner p=new Scanner(System.in);
     	String exp=p.next();
-    	for(int i=0;i<exp.length();i++)
+    	loop:for(int i=0;i<exp.length();i++)
     	{
-    		if(exp.charAt(i)=='+'||exp.charAt(i)=='-'||exp.charAt(i)=='*'||exp.charAt(i)=='/'||exp.charAt(i)=='('||exp.charAt(i)==')'||
-    				exp.charAt(i)=='^'||Character.isDigit(exp.charAt(i)))
-    		{
-    			continue;
-    		}
-    		else {
-    			out.println("Only number should be contain");
-    			return getexp();
-    		}
+           if(exp.charAt(i)=='+')
+           {
+        	   continue loop;
+           }
+           else {
+        	   return getexp();
+           }
     	}
     	return exp;
     }
@@ -185,7 +183,6 @@ public class Main extends Calculator
     }
 	public static void main(String[] args) {
 	    Main a1=new Main();
-	    Scanner p=new Scanner(System.in);
 	    out.print("Enter the expression for evaluation:");
 	    a1.str=a1.getexp();
 	    a1.map.put('(',4);
